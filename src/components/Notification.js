@@ -12,7 +12,8 @@ const Notification = () => {
   if (notification === null) {
     return null;
   }
-  return <div style={style}>You voted {notification}</div>;
+
+  return <div style={style}>{notification}</div>;
 };
 
 export default Notification;

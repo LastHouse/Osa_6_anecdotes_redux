@@ -11,14 +11,14 @@ const notificationReducer = (state = initialState, action) => {
   }
 };
 
-export const showNotification = (id, content) => {
+export const showNotification = (content) => {
   return {
     type: 'SHOW',
-    data: { id, content },
+    data: { content },
   };
 };
 
-export const hideNotification = (id, content) => {
+export const hideNotification = (content) => {
   return {
     type: 'HIDE',
     data: { content },
