@@ -8,7 +8,7 @@
 ];
 */
 
-const getId = () => (100000 * Math.random()).toFixed(0);
+//const getId = () => (100000 * Math.random()).toFixed(0);
 
 /* const asObject = (anecdote) => {
   return {
@@ -20,6 +20,8 @@ const getId = () => (100000 * Math.random()).toFixed(0);
 
 const initialState = anecdotesAtStart.map(asObject); */
 
+import anecdoteService from '../services/anecdotes';
+
 const anecdoteReducer = (state = [], action) => {
   console.log('state now: ', state);
   console.log('action', action);
@@ -27,6 +29,8 @@ const anecdoteReducer = (state = [], action) => {
     case 'NEW_ANECDOTE':
       return [...state, action.data];
     case 'INIT_ANECDOTES':
+      return action.data;
+    case 'GET_ANECDOTE':
       return action.data;
     case 'VOTE':
       const id = action.data.id;
@@ -43,24 +47,43 @@ const anecdoteReducer = (state = [], action) => {
   }
 };
 
-export const initializeAnecdotes = (anecdotes) => {
-  return {
-    type: 'INIT_ANECDOTES',
-    data: anecdotes,
+export const initializeAnecdotes = () => {
+  return async (dispatch) => {
+    const anecdotes = await anecdoteService.getAll();
+    dispatch({
+      type: 'INIT_ANECDOTES',
+      data: anecdotes,
+    });
   };
 };
 
-export const createAnecdote = (data) => {
-  return {
-    type: 'NEW_ANECDOTE',
-    data,
+export const createAnecdote = (content) => {
+  return async (dispatch) => {
+    const newAnecdote = await anecdoteService.createNew(content);
+    dispatch({
+      type: 'NEW_ANECDOTE',
+      data: newAnecdote,
+    });
   };
 };
 
-export const voteAnecdote = (id) => {
-  return {
-    type: 'VOTE',
-    data: { id },
+export const getAnecdote = (id) => {
+  return async (dispatch) => {
+    const anecdote = await anecdoteService.getOne(id);
+    dispatch({
+      type: 'GET_ANECDOTE',
+      data: anecdote,
+    });
+  };
+};
+
+export const voteAnecdote = (anecdote) => {
+  return async (dispatch) => {
+    const votedAnecdote = await anecdoteService.vote(anecdote);
+    dispatch({
+      type: 'VOTE',
+      data: votedAnecdote,
+    });
   };
 };
 

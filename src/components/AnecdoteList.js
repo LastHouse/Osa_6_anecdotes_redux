@@ -16,11 +16,11 @@ const AnecdoteList = () => {
 
   const dispatch = useDispatch();
 
-  const vote = (id, content) => {
-    dispatch(voteAnecdote(id));
-    dispatch(showNotification('You voted: ' + content));
+  const addVote = async (anecdote) => {
+    dispatch(voteAnecdote(anecdote));
+    dispatch(showNotification('You voted: ' + anecdote.content));
     setTimeout(() => {
-      dispatch(hideNotification(content));
+      dispatch(hideNotification(anecdote.content));
     }, 5000);
   };
 
@@ -38,7 +38,7 @@ const AnecdoteList = () => {
             has {anecdote.votes}{' '}
             <button
               onClick={() => {
-                vote(anecdote.id, anecdote.content);
+                addVote(anecdote);
               }}
             >
               vote
